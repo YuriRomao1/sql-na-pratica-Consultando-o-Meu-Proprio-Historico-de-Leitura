@@ -1,0 +1,13 @@
+{
+  "name": "SQL na Prática Hands-on",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-sqlite"
+      ]
+    }
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y sqlite3 make && bash scripts/reset-database.sh"
+}
