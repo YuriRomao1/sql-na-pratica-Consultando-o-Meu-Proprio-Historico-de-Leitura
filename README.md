@@ -1,160 +1,221 @@
 # SQL na Prática — Consultando o Meu Próprio Histórico de Leitura
 
-Este repositório transforma o artigo **SQL na Prática: Consultando o Meu Próprio Histórico de Leitura** em um hands-on executável.
+Este repositório transforma o artigo **SQL na Prática: Consultando o Meu Próprio Histórico de Leitura** em um hands-on guiado com GitHub Issues, Codespaces e GitHub Actions.
 
-A proposta é simples:
+A experiência foi desenhada para funcionar assim:
 
 1. você cria sua própria cópia do laboratório;
-2. recebe uma missão por GitHub Issue;
-3. abre o ambiente no GitHub Codespaces;
-4. escreve SQL de verdade;
+2. inicia o hands-on;
+3. recebe a Etapa 1 por GitHub Issue;
+4. resolve o exercício no Codespace;
 5. testa localmente;
 6. faz commit e push;
-7. o GitHub Actions valida a resposta e publica feedback.
+7. o GitHub Actions valida a resposta;
+8. ao concluir uma etapa, a próxima Issue é criada automaticamente.
 
-[![Copiar o exercício](https://img.shields.io/badge/Copiar%20o%20exerc%C3%ADcio-2EA44F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YuriRomao1/sql-na-pratica-Consultando-o-Meu-Proprio-Historico-de-Leitura/fork)
+[![Start Hands-on](https://img.shields.io/badge/Start%20Hands--on-2EA44F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YuriRomao1/sql-na-pratica-Consultando-o-Meu-Proprio-Historico-de-Leitura/generate)
 
-> **Importante:** faça o hands-on na sua própria cópia. Assim, suas Issues, commits, execuções do GitHub Actions e progresso ficam isolados dos demais participantes.
+> **Antes de usar o botão:** este repositório precisa estar marcado como **Template repository** em **Settings → General → Template repository**. Depois disso, o botão acima cria um repositório independente para cada participante.
 
-## MVP atual
+## Infraestrutura pedagógica v1.0
 
-A primeira etapa pratica:
+A v1.0 implementa duas etapas encadeadas:
+
+### Etapa 1 — SELECT
+
+Conceitos:
 
 - `SELECT`
 - `FROM`
 - `LIMIT`
 
+Missão: listar título, autor e nota dos 3 primeiros livros.
+
+### Etapa 2 — WHERE e NULL
+
+Conceitos:
+
+- `WHERE`
+- `IS NULL`
+- combinação entre seleção e filtro
+
+Missão: listar título e autor dos livros que ainda não foram concluídos.
+
+A **Issue da Etapa 2 é criada automaticamente quando a Etapa 1 é concluída**.
+
 ## Como iniciar o hands-on
 
-### 1. Copie o exercício
+### 1. Crie sua cópia
 
-Clique no botão **Copiar o exercício** acima e crie um fork na sua conta do GitHub.
+Clique em **Start Hands-on** no topo do README.
 
-### 2. Habilite o GitHub Actions, se necessário
+Na tela **Create a new repository from template**:
 
-Em forks de repositórios públicos, o GitHub pode manter os workflows desabilitados inicialmente.
+1. escolha sua conta;
+2. defina um nome para o laboratório;
+3. mantenha a branch `main`;
+4. crie o repositório.
+
+Assim, cada participante terá seu próprio:
+
+- histórico de commits;
+- GitHub Issues;
+- GitHub Actions;
+- Codespace;
+- progresso.
+
+### 2. Inicie a primeira Issue
 
 Na sua cópia:
-
-1. abra a aba **Actions**;
-2. se o GitHub exibir a opção para habilitar workflows, confirme a habilitação.
-
-### 3. Inicie a primeira etapa
-
-Ainda na sua cópia:
 
 1. abra **Actions**;
 2. selecione **Start SQL Hands-on**;
 3. clique em **Run workflow**;
-4. aguarde a criação da Issue **SQL Hands-on — Etapa 1: SELECT**;
-5. abra a Issue e siga as instruções.
+4. abra a Issue **SQL Hands-on — Etapa 1: SELECT** criada automaticamente.
 
-### 4. Abra seu Codespace
+### 3. Abra o Codespace
 
-Na sua cópia do repositório:
+Na sua cópia:
 
 1. clique em **Code**;
-2. abra a aba **Codespaces**;
+2. abra **Codespaces**;
 3. clique em **Create codespace on main**.
 
-O ambiente instalará SQLite e criará o banco automaticamente.
+O ambiente instala SQLite e cria o banco automaticamente.
 
-## Ambiente
+## Comandos do laboratório
 
-O banco é criado a partir de:
-
-```text
-database/schema.sql
-database/seed.sql
-```
-
-Para recriar o banco a qualquer momento:
+Recriar o banco:
 
 ```bash
 make reset
 ```
 
-Para abrir o SQLite:
+Abrir o SQLite:
 
 ```bash
 make db
 ```
 
-Para testar a primeira etapa:
+Testar a Etapa 1:
 
 ```bash
 make test-01
 ```
 
-## Sua primeira missão
-
-Edite:
-
-```text
-exercises/01-select.sql
-```
-
-O objetivo é listar **título, autor e nota dos 3 primeiros livros** usando os conceitos desta etapa.
-
-Quando terminar, teste localmente:
+Testar a Etapa 2:
 
 ```bash
-make test-01
+make test-02
 ```
 
-Se o teste passar:
+## Feedback pedagógico
 
-```bash
-git add exercises/01-select.sql
-git commit -m "exercise: complete step 1 select"
-git push
-```
-
-O GitHub Actions executará a validação novamente e publicará o resultado na Issue.
-
-## Arquitetura
+Os testes distinguem três situações:
 
 ```text
-.devcontainer/      ambiente reproduzível do Codespaces
-.github/steps/      conteúdo pedagógico das etapas
-.github/workflows/  orquestração e validação automática
-database/           schema e dados iniciais
-exercises/          arquivos que o aluno deve editar
-scripts/            automação local
-tests/              validação comportamental das queries
+nenhuma resposta SQL
+        ↓
+orientação para começar
+
+erro de sintaxe SQL
+        ↓
+mensagem do SQLite + orientação
+
+query executa, mas resultado está incorreto
+        ↓
+resultado obtido + dica pedagógica
 ```
 
-## Fluxo da primeira etapa
+Quando a resposta estiver correta:
 
 ```text
-Copiar o exercício
-        ↓
-Sua própria cópia do repositório
-        ↓
-Start SQL Hands-on
-        ↓
-Issue "Etapa 1: SELECT"
-        ↓
-Open Codespace
-        ↓
-Editar exercises/01-select.sql
-        ↓
 make test-01
         ↓
-commit + push
+PASS local
+        ↓
+git commit + push
         ↓
 GitHub Actions
         ↓
-validação SQLite
+feedback ✅ na Issue
         ↓
-feedback na Issue
+Issue #1 fechada
+        ↓
+Issue #2 criada automaticamente
 ```
 
-## Próximos incrementos
+## Estrutura
 
-Depois de validarmos o mecanismo da Etapa 1, o hands-on será ampliado para:
+```text
+.devcontainer/
+└── devcontainer.json          ambiente do Codespace
 
-- Etapa 2 — `WHERE` e `NULL`
+.github/
+├── steps/
+│   ├── 1-select.md            conteúdo da Etapa 1
+│   └── 2-where-null.md        conteúdo da Etapa 2
+└── workflows/
+    ├── 0-start-hands-on.yml   inicia o hands-on
+    ├── 1-validate-select.yml  valida Etapa 1 e abre Etapa 2
+    └── 2-validate-where-null.yml
+
+database/
+├── schema.sql
+└── seed.sql
+
+exercises/
+├── 01-select.sql
+└── 02-where-null.sql
+
+tests/
+├── test-01.sh
+└── test-02.sh
+
+scripts/
+└── reset-database.sh
+
+Makefile
+```
+
+## Máquina de estados da v1.0
+
+```text
+START HANDS-ON
+      ↓
+Issue #1 — SELECT
+      ↓
+resolver exercício
+      ↓
+make test-01
+      ↓
+commit + push
+      ↓
+Validate Step 1
+   ↙          ↘
+ FAIL        PASS
+  ↓            ↓
+feedback     fecha Issue #1
+               ↓
+          cria Issue #2
+               ↓
+        WHERE + IS NULL
+               ↓
+          make test-02
+               ↓
+          commit + push
+               ↓
+        Validate Step 2
+           ↙       ↘
+         FAIL      PASS
+          ↓          ↓
+       feedback   conclui v1.0
+```
+
+## Próximos incrementos de conteúdo
+
+A infraestrutura agora pode ser repetida para novas etapas:
+
 - Etapa 3 — `LIKE`
 - Etapa 4 — `ORDER BY`
 - Etapa 5 — funções agregadas
