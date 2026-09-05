@@ -14,25 +14,45 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install SQLite
-        run: sudo apt-get update && sudo apt-get install -y sqlite3
-
-      - name: Validate exercise
-        id: test
-        run: bash tests/test-01.sh
-
-      - name: Find Step 1 issue
-        if: success()
+      - name: Find active Step 1 issue
         id: issue
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          NUMBER=$(gh issue list --state open --search '"SQL Hands-on — Etapa 1" in:title' --json number --jq '.[0].number // empty')
+          NUMBER=$(gh issue list \
+            --state open \
+            --search '"SQL Hands-on — Etapa 1" in:title' \
+            --json number \
+            --jq '.[0].number // empty')
+
           echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+
+          if [ -z "$NUMBER" ]; then
+            echo "Hands-on ainda não foi iniciado. Validação ignorada."
+          else
+            echo "Issue ativa encontrada: #$NUMBER"
+          fi
+
+      - name: Install SQLite
+        if: steps.issue.outputs.number != ''
+        run: sudo apt-get update && sudo apt-get install -y sqlite3
+
+      - name: Validate exercise
+        if: steps.issue.outputs.number != ''
+        run: bash tests/test-01.sh
+
+      - name: Publish failure feedback
+        if: failure() && steps.issue.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body $'❌ **Sua consulta ainda não passou na validação.**\n\nAbra a execução do GitHub Actions ou rode `make test-01` no Codespace para ver o resultado obtido.\n\nRevise quais colunas devem ser retornadas e a quantidade de linhas solicitada. Depois faça um novo commit e push.'
 
       - name: Publish success feedback
         if: success() && steps.issue.outputs.number != ''
