@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DATABASE=".data/livros.db"
-EXERCISE="exercises/01-select.sql"
+EXERCISE="exercises/02-where-null.sql"
 
 bash scripts/reset-database.sh >/dev/null
 
@@ -11,16 +11,13 @@ if [ ! -f "$EXERCISE" ]; then
   exit 1
 fi
 
-# Remove comentários de linha, espaços, quebras de linha e ponto e vírgula.
-# Assim conseguimos distinguir o arquivo-modelo, que contém apenas instruções,
-# de uma resposta SQL realmente escrita pelo aluno.
 SQL_CONTENT=$(sed -E 's/--.*$//' "$EXERCISE" | tr -d '[:space:];')
 
 if [ -z "$SQL_CONTENT" ]; then
   echo "Você ainda não escreveu uma consulta SQL em $EXERCISE."
   echo ""
-  echo "Missão: liste titulo, autor e nota dos 3 primeiros livros."
-  echo "Dica: você vai precisar de SELECT, FROM e LIMIT."
+  echo "Missão: liste titulo e autor dos livros ainda não concluídos."
+  echo "Dica: você vai precisar de WHERE e IS NULL."
   exit 1
 fi
 
@@ -34,14 +31,13 @@ if [ "$SQLITE_EXIT" -ne 0 ]; then
   echo ""
   echo "$RESULT"
   echo ""
-  echo "Corrija a sintaxe e execute novamente: make test-01"
+  echo "Corrija a sintaxe e execute novamente: make test-02"
   exit 1
 fi
 
 EXPECTED=$(cat <<'EOF'
-Clean Code|Robert Martin|4.2
-Duna|Frank Herbert|4.8
-O Programador Pragmático|David Thomas|4.5
+1984|George Orwell
+Sapiens|Yuval Noah Harari
 EOF
 )
 
@@ -51,8 +47,8 @@ if [ "$RESULT" != "$EXPECTED" ]; then
   echo "Resultado obtido:"
   printf '%s\n' "$RESULT"
   echo ""
-  echo "Dica: confira as colunas selecionadas e quantas linhas devem ser retornadas."
+  echo "Dica: filtre os registros em que concluido não possui valor."
   exit 1
 fi
 
-echo "PASS: Etapa 1 concluída."
+echo "PASS: Etapa 2 concluída."

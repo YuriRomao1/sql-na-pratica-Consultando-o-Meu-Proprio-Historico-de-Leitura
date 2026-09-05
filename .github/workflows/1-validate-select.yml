@@ -54,11 +54,25 @@ jobs:
         run: |
           gh issue comment "$ISSUE_NUMBER" --body $'❌ **Sua consulta ainda não passou na validação.**\n\nAbra a execução do GitHub Actions ou rode `make test-01` no Codespace para ver o resultado obtido.\n\nRevise quais colunas devem ser retornadas e a quantidade de linhas solicitada. Depois faça um novo commit e push.'
 
-      - name: Publish success feedback
+      - name: Complete Step 1 and open Step 2
         if: success() && steps.issue.outputs.number != ''
         env:
           GH_TOKEN: ${{ github.token }}
           ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
         run: |
-          gh issue comment "$ISSUE_NUMBER" --body $'✅ **Etapa 1 concluída!**\n\nVocê conseguiu consultar colunas específicas e limitar o resultado.\n\nConceitos praticados: `SELECT`, `FROM` e `LIMIT`.\n\nO próximo incremento do hands-on será `WHERE` e `NULL`.'
+          gh issue comment "$ISSUE_NUMBER" --body $'✅ **Etapa 1 concluída!**\n\nVocê conseguiu consultar colunas específicas e limitar o resultado.\n\nConceitos praticados: `SELECT`, `FROM` e `LIMIT`.\n\nA próxima etapa será criada automaticamente.'
           gh issue close "$ISSUE_NUMBER" --reason completed
+
+          STEP2=$(gh issue list \
+            --state open \
+            --search '"SQL Hands-on — Etapa 2" in:title' \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -z "$STEP2" ]; then
+            gh issue create \
+              --title "SQL Hands-on — Etapa 2: WHERE e NULL" \
+              --body-file .github/steps/2-where-null.md
+          else
+            echo "Etapa 2 já está aberta como Issue #$STEP2."
+          fi

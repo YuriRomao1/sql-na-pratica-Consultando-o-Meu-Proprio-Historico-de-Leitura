@@ -1,0 +1,12 @@
+-- Etapa 2 — WHERE e NULL
+--
+-- Missão:
+-- Liste titulo e autor dos livros que ainda não foram concluídos.
+--
+-- Regras:
+-- 1. Use SELECT.
+-- 2. Leia os dados da tabela livros.
+-- 3. Filtre apenas os registros cujo campo concluido ainda não possui valor.
+--
+-- Escreva sua consulta abaixo:
+
