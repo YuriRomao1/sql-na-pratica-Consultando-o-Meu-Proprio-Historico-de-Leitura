@@ -1,0 +1,32 @@
+name: Start SQL Hands-on
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check if Step 1 issue already exists
+        id: issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NUMBER=$(gh issue list --state open --search '"SQL Hands-on — Etapa 1" in:title' --json number --jq '.[0].number // empty')
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Create Step 1 issue
+        if: steps.issue.outputs.number == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "SQL Hands-on — Etapa 1: SELECT" \
+            --body-file .github/steps/1-select.md
