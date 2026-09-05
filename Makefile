@@ -11,3 +11,6 @@ db:
 
 test-01:
 	bash tests/test-01.sh
+
+test-02:
+	bash tests/test-02.sh
