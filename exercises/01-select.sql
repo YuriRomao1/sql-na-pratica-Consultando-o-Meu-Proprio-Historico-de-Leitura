@@ -1,0 +1,12 @@
+-- Etapa 1 — SELECT
+--
+-- Missão:
+-- Liste titulo, autor e nota dos 3 primeiros livros da tabela livros.
+--
+-- Regras:
+-- 1. Use SELECT.
+-- 2. Leia os dados da tabela livros.
+-- 3. Retorne somente 3 registros.
+--
+-- Escreva sua consulta abaixo:
+

@@ -1,0 +1,44 @@
+name: Validate Step 1 - SELECT
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "exercises/01-select.sql"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SQLite
+        run: sudo apt-get update && sudo apt-get install -y sqlite3
+
+      - name: Validate exercise
+        id: test
+        run: bash tests/test-01.sh
+
+      - name: Find Step 1 issue
+        if: success()
+        id: issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NUMBER=$(gh issue list --state open --search '"SQL Hands-on — Etapa 1" in:title' --json number --jq '.[0].number // empty')
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Publish success feedback
+        if: success() && steps.issue.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body $'✅ **Etapa 1 concluída!**\n\nVocê conseguiu consultar colunas específicas e limitar o resultado.\n\nConceitos praticados: `SELECT`, `FROM` e `LIMIT`.\n\nO próximo incremento do hands-on será `WHERE` e `NULL`.'
+          gh issue close "$ISSUE_NUMBER" --reason completed
