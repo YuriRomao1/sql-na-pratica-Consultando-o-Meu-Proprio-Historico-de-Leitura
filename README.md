@@ -4,13 +4,17 @@ Este repositório transforma o artigo **SQL na Prática: Consultando o Meu Próp
 
 A proposta é simples:
 
-1. você lê o conceito;
-2. abre o laboratório no GitHub Codespaces;
-3. recebe uma missão por GitHub Issue;
+1. você cria sua própria cópia do laboratório;
+2. recebe uma missão por GitHub Issue;
+3. abre o ambiente no GitHub Codespaces;
 4. escreve SQL de verdade;
 5. testa localmente;
 6. faz commit e push;
 7. o GitHub Actions valida a resposta e publica feedback.
+
+[![Copiar o exercício](https://img.shields.io/badge/Copiar%20o%20exerc%C3%ADcio-2EA44F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YuriRomao1/sql-na-pratica-Consultando-o-Meu-Proprio-Historico-de-Leitura/fork)
+
+> **Importante:** faça o hands-on na sua própria cópia. Assim, suas Issues, commits, execuções do GitHub Actions e progresso ficam isolados dos demais participantes.
 
 ## MVP atual
 
@@ -20,20 +24,44 @@ A primeira etapa pratica:
 - `FROM`
 - `LIMIT`
 
-## Como iniciar
+## Como iniciar o hands-on
 
-Depois que esta versão estiver na branch `main`:
+### 1. Copie o exercício
+
+Clique no botão **Copiar o exercício** acima e crie um fork na sua conta do GitHub.
+
+### 2. Habilite o GitHub Actions, se necessário
+
+Em forks de repositórios públicos, o GitHub pode manter os workflows desabilitados inicialmente.
+
+Na sua cópia:
 
 1. abra a aba **Actions**;
+2. se o GitHub exibir a opção para habilitar workflows, confirme a habilitação.
+
+### 3. Inicie a primeira etapa
+
+Ainda na sua cópia:
+
+1. abra **Actions**;
 2. selecione **Start SQL Hands-on**;
 3. clique em **Run workflow**;
-4. abra a Issue criada automaticamente;
-5. crie um Codespace pela branch `main`;
-6. siga as instruções da Issue.
+4. aguarde a criação da Issue **SQL Hands-on — Etapa 1: SELECT**;
+5. abra a Issue e siga as instruções.
+
+### 4. Abra seu Codespace
+
+Na sua cópia do repositório:
+
+1. clique em **Code**;
+2. abra a aba **Codespaces**;
+3. clique em **Create codespace on main**.
+
+O ambiente instalará SQLite e criará o banco automaticamente.
 
 ## Ambiente
 
-Ao criar o Codespace, o repositório instala SQLite e cria o banco automaticamente a partir de:
+O banco é criado a partir de:
 
 ```text
 database/schema.sql
@@ -58,6 +86,32 @@ Para testar a primeira etapa:
 make test-01
 ```
 
+## Sua primeira missão
+
+Edite:
+
+```text
+exercises/01-select.sql
+```
+
+O objetivo é listar **título, autor e nota dos 3 primeiros livros** usando os conceitos desta etapa.
+
+Quando terminar, teste localmente:
+
+```bash
+make test-01
+```
+
+Se o teste passar:
+
+```bash
+git add exercises/01-select.sql
+git commit -m "exercise: complete step 1 select"
+git push
+```
+
+O GitHub Actions executará a validação novamente e publicará o resultado na Issue.
+
 ## Arquitetura
 
 ```text
@@ -73,22 +127,26 @@ tests/              validação comportamental das queries
 ## Fluxo da primeira etapa
 
 ```text
-Run workflow
-    ↓
+Copiar o exercício
+        ↓
+Sua própria cópia do repositório
+        ↓
+Start SQL Hands-on
+        ↓
 Issue "Etapa 1: SELECT"
-    ↓
+        ↓
 Open Codespace
-    ↓
+        ↓
 Editar exercises/01-select.sql
-    ↓
+        ↓
 make test-01
-    ↓
+        ↓
 commit + push
-    ↓
+        ↓
 GitHub Actions
-    ↓
+        ↓
 validação SQLite
-    ↓
+        ↓
 feedback na Issue
 ```
 
